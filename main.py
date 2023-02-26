@@ -9,6 +9,7 @@ from sqlalchemy.orm import relationship
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
 from forms import LoginForm, RegisterForm, CreatePostForm, CommentForm
 from flask_gravatar import Gravatar
+from sqlalchemy import desc, asc
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
@@ -85,7 +86,7 @@ def admin_only(f):
 
 @app.route('/')
 def get_all_posts():
-    posts = BlogPost.query.all()
+    posts = BlogPost.query.order_by(desc(BlogPost.date)).limit(3).all
     return render_template("index.html", all_posts=posts, current_user=current_user)
 
 
